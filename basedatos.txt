@@ -1,0 +1,165 @@
+create database DBCARRITO
+GO
+USE DBCARRITO
+GO
+CREATE TABLE CATEGORIA
+(
+IdCategoria int primary key identity,
+Descripcion varchar(100),
+Activo bit default 1,
+FechaRegistro datetime default getdate()
+)
+go
+CREATE TABLE MARCA
+(
+IdMarca int primary key identity,
+Descripcion varchar(100),
+Activo bit default 1,
+FechaRegistro datetime default getdate()
+)
+go 
+CREATE TABLE PRODUCTO
+(
+IdProducto int primary key identity,
+Nombre varchar(500),
+Descripcion varchar(500),
+IdMarca int references Marca(IdMarca),
+IdCategoria int references Categoria(IdCategoria),
+Precio decimal(10,2) default 0,
+Stock int,
+RutaImagen varchar(100),
+NombreImagen varchar(100),
+Active bit default 1,
+FechaRegistro datetime default getdate()
+)
+go
+CREATE TABLE CLIENTE
+(
+IdCliente int primary key identity,
+Nombre varchar(100),
+Apellidos varchar(100),
+Correo varchar(100),
+Clave varchar(150),
+Reestablecer bit default 0,
+FechaRegistro datetime default getdate()
+)
+go
+CREATE TABLE CARRITO
+(
+IdCarrito int identity primary key,
+IdCliente int references CLIENTE(IdCliente),
+IdProducto int references PRODUCTO(IdProducto),
+Cantidad int
+)
+go
+CREATE TABLE VENTA
+(
+IdVenta int identity primary key,
+IdCliente int references CLIENTE(IdCliente),
+TotalProducto int,
+MontoTotal decimal(10,2),
+Contacto varchar(50),
+IdDistrito varchar(10),
+Telefono varchar(50),
+Direccion varchar(500),
+IdTransaccion varchar(50),
+FechaVenta datetime default getdate()
+)
+go
+CREATE TABLE DETALLE_VENTA
+(
+IdDetalleVenta int primary key identity,
+IdVenta int references Venta(IdVenta),
+IdProducto int references PRODUCTO(IdProducto),
+Cantidad int ,
+Total decimal(10,2)
+)
+go
+CREATE TABLE USUARIO
+(
+IdUsuario int identity primary key,
+Nombre varchar(100),
+Apellidos varchar(100),
+Correo Varchar(100),
+Clave varchar(150),
+Reestablecer bit default 1,
+Activo bit default 1,
+FechaRegistro datetime default getdate()
+
+)
+go
+CREATE TABLE DEPARTAMENTO
+(
+IdDepartamento varchar(2)  not null,
+Descripcion varchar(45) not null
+
+)
+go
+CREATE TABLE PROVINCIA
+(
+IdProvincia varchar(4) not null,
+Descripcion varchar(45) not null,
+IdDepartamento varchar(2) not null,
+
+)
+go
+Create table DISTRITO
+(
+IdDistrito varchar(6) not null,
+Descripcion varchar(45) not null,
+IdProvincia varchar(4) not null,
+IdDepartamento varchar(2) not null
+
+
+)
+
+insert into USUARIO(Nombre,Apellidos,Correo,Clave) values ('test nombre', 'test apellidos', 'test@example.com','ecd71870d1963316a97e3ac3408c9835ad8cf0f3c1bc703527c30265534f75ae')
+select *from USUARIO
+insert into CATEGORIA(Descripcion) VALUES
+('Tecnologia'),
+('Muebles'),
+('Dormitorio'),
+('Deportes')
+
+insert into MARCA(Descripcion) values
+('SONYTE'),
+('HPTE'),
+('LGTE'),
+('HYUNDAITE'),
+('CANONTE'),
+('ROBERTA ALLENTE')
+
+INSERT INTO DEPARTAMENTO(IdDepartamento,Descripcion)
+VALUES
+('01','AREQUIPA'),
+('02', 'ICA'),
+('03', 'LIMA')
+
+select *from DEPARTAMENTO
+
+insert into PROVINCIA(IdProvincia,Descripcion,IdDepartamento)
+values
+('0101','Arequipa','01'),
+('0102','Camana','01'),
+('0201','ica','01'),
+('0201','chincha','02'),
+('0301','Lima','03'),
+('0301','Barranca','03')
+select * from PROVINCIA
+select * from DISTRITO
+
+insert into DISTRITO(IdDistrito,Descripcion,IdProvincia,IdDepartamento) values
+('010101','Nieva', '0101','01'),
+('010102','El cenepa', '0101','01'),
+('010201','Camana', '0102','01'),
+('010201','Jose maria quimper', '0102','01'),
+
+('020101','ica', '0201','02'),
+('020102','la tinguina', '0201','02'),
+('020201','chicha alta', '0202','02'),
+('020202','alto laran', '0202','02'),
+
+('030101','Lima', '0301','03'),
+('030102','ancon', '0301','03'),
+('030201','barranca', '0302','03'),
+('030202','Paramonga', '0302','03')
